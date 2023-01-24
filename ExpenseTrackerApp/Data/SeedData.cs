@@ -1,4 +1,5 @@
-﻿using ExpenseTrackerApp.Models;
+﻿using ExpenseTrackerApp.Enum;
+using ExpenseTrackerApp.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExpenseTrackerApp.Data
@@ -27,16 +28,25 @@ namespace ExpenseTrackerApp.Data
                         {
                             Name = "Food",
                             Icon = "🍔",
+                            CategoryType = CategoryType.Expense,
                         },
                         new Category()
                         {
                             Name = "Travel",
                             Icon = "✈️",
+                            CategoryType = CategoryType.Expense,
                         },
                         new Category()
                         {
                             Name = "Entertainment",
                             Icon = "🍾",
+                            CategoryType = CategoryType.Expense,
+                        },
+                        new Category()
+                        {
+                            Name = "Salary",
+                            Icon = "💸",
+                            CategoryType= CategoryType.Income,
                         }
                     });
         }

@@ -19,23 +19,23 @@ namespace ExpenseTrackerApp.Services.TransactionService
             return transactions;
         }
 
-        public async Task AddNewTransactionAsync(Transaction transaction)
-        {
-            await _context.Transactions.AddAsync(transaction);
-            await _context.SaveChangesAsync();
-        }
-
         public async Task<Transaction> GetTransactionByIdAsync(int id)
         {
             var transaction = await _context.Transactions.Include(t => t.Category).SingleOrDefaultAsync(t => t.Id == id);
             return transaction;
         }
 
+        public async Task AddNewTransactionAsync(Transaction transaction)
+        {
+            await _context.Transactions.AddAsync(transaction);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task UpdateTransactionAsync(Transaction transaction)
         {
-            var dbTransaction = await _context.Transactions.FirstOrDefaultAsync(t => t.Id == transaction.Id);
+            var dbTransaction = await GetTransactionByIdAsync(transaction.Id);
 
-            if(transaction != null)
+            if (transaction != null)
             {
                 dbTransaction.Description = transaction.Description;
                 dbTransaction.Amount = transaction.Amount;

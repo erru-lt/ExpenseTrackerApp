@@ -1,4 +1,5 @@
 using ExpenseTrackerApp.Data;
+using ExpenseTrackerApp.Services.CategoryService;
 using ExpenseTrackerApp.Services.DropdownService;
 using ExpenseTrackerApp.Services.TransactionService;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +15,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 });
 
 builder.Services.AddScoped<ITransactionService, TransactionService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IDropdownService, DropdownService>();
 
 var app = builder.Build();

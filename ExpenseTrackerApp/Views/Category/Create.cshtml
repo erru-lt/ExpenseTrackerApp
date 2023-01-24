@@ -1,39 +1,54 @@
-﻿@model ExpenseTrackerApp.Models.Category
+﻿@using ExpenseTrackerApp.Enum
+@model ExpenseTrackerApp.Models.Category
 
 @{
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<div class="container col-md-6">
 
-<h4>Category</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-controller="Category" asp-action="CreateCategory" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" type="text" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Icon" class="control-label"></label>
-                <input asp-for="Icon" type="text" class="form-control" />
-                <span asp-validation-for="Icon" class="text-danger"></span>
-            </div>
-            <br />
-            <div class="form-group">
-                <button class="btn btn-primary" type="submit">Create</button>
-            </div>
-        </form>
+    <h2>Create</h2>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-controller="Category" asp-action="Create" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <div class="btn-group">
+                        <input asp-for="CategoryType" type="radio" value="@Enum.GetName(CategoryType.Expense)" />
+                        <label asp-for="CategoryType" class="btn btn-danger">Expense</label>
+
+                        <input asp-for="CategoryType" type="radio" value="@Enum.GetName(CategoryType.Income)" />
+                         <label asp-for="CategoryType" class="btn btn-success">Income</label>
+                    </div>
+                </div>
+                <div class="form-group mt-4">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Icon" class="control-label"></label>
+                    <input asp-for="Icon" type="text" class="form-control" />
+                    <span asp-validation-for="Icon" class="text-danger"></span>
+                </div>
+                <div class="form-group mt-3">
+                    <button class="btn btn-primary" type="submit">Create</button>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
-<br />
-<div>
-    <a asp-action="Index">Back to List</a>
+    <br />
+    <div class="mt-1">
+        <a class="btn btn-secondary" asp-action="Index">
+            <i class="bi bi-house-fill"></i>
+            Back to List
+        </a>
+    </div>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }

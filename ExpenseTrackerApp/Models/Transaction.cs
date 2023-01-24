@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using ExpenseTrackerApp.Enum;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -18,22 +19,25 @@ namespace ExpenseTrackerApp.Models
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
         [DisplayName("Date")]
         public DateTime CreationDate { get; set; } = DateTime.Now;
-        
+
         public int CategoryId { get; set; }
         public Category? Category { get; set; }
 
         [NotMapped]
         public string CategoryName
         {
-            get => Category == null 
-                ? " " 
+            get => Category == null
+                ? " "
                 : $"{Category.Icon} {Category.Name}";
         }
 
         [NotMapped]
         public string FormattedAmount
         {
-            get => Amount.ToString("C");
+            //get => Amount.ToString("C");
+            get => Category == null || Category.CategoryType == CategoryType.Expense
+                ? $"- {Amount:C}"
+                : $"+ {Amount:C}";
         }
     }
 }

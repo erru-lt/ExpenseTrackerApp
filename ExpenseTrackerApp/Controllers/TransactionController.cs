@@ -30,8 +30,10 @@ namespace ExpenseTrackerApp.Controllers
         {
             var categoryDropdown = await _dropdownService.GetCategoryDropdownValues();
             ViewBag.Categories = new SelectList(categoryDropdown.Categories, "Id", "IconAndName");
+
+            var transaction = new Transaction();
             //ViewData["Categories"] = new SelectList(_context.Categories, "Id", "Icon");
-            return View(new Transaction());
+            return View(transaction);
         }
 
         [HttpPost]
