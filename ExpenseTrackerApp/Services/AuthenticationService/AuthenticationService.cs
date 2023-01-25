@@ -17,37 +17,20 @@ namespace ExpenseTrackerApp.Services.AuthenticationService
 
         public async Task<bool> Login(LoginViewModel loginViewModel)
         {
-            IdentityUser? user = await _userManager.FindByEmailAsync(loginViewModel.EmailAdress);
+            IdentityUser user = await FindUser(loginViewModel.EmailAdress);
 
-            if(user == null)
+            if (user == null)
             {
                 return false;
             }
 
-            var passwordCheck = await _userManager.CheckPasswordAsync(user, loginViewModel.Password);
-
-            if(passwordCheck)
-            {
-                var result = await _signInManager.PasswordSignInAsync(user, loginViewModel.Password, false, false);
-
-                if(result.Succeeded)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                return false;
-            }
+            return await PasswordCheck(loginViewModel, user);
         }
+
 
         public async Task<bool> Register(RegisterViewModel registerViewModel)
         {
-            IdentityUser? user = await _userManager.FindByEmailAsync(registerViewModel.EmailAdress);
+            IdentityUser? user = await FindUser(registerViewModel.EmailAdress);
 
             if (user != null)
             {
@@ -76,9 +59,37 @@ namespace ExpenseTrackerApp.Services.AuthenticationService
             await _signInManager.SignOutAsync();
         }
 
-        private async Task AddRole(IdentityUser? user)
+        private async Task<bool> PasswordCheck(LoginViewModel loginViewModel, IdentityUser user)
+        {
+            var isPasswordMatch = await _userManager.CheckPasswordAsync(user, loginViewModel.Password);
+
+            if (isPasswordMatch)
+            {
+                var signInResult = await _signInManager.PasswordSignInAsync(user, loginViewModel.Password, false, false);
+
+                if (signInResult.Succeeded)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private async Task AddRole(IdentityUser user)
         {
             await _userManager.AddToRoleAsync(user, UserRoles.User);
+        }
+   
+        private async Task<IdentityUser> FindUser(string emailAdress)
+        {
+            return await _userManager.FindByEmailAsync(emailAdress);
         }
     }
 }
