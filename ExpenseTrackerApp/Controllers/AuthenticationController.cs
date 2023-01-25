@@ -13,6 +13,33 @@ namespace ExpenseTrackerApp.Controllers
             _authenticationService = authenticationService;
         }
 
+        public ActionResult Login()
+        {
+            var loginViewModel = new LoginViewModel();
+            return View(loginViewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginViewModel loginViewModel)
+        {
+            if(ModelState.IsValid == false)
+            {
+                return View(loginViewModel);
+            }
+
+            var result = await _authenticationService.Login(loginViewModel);
+
+            if(result)
+            {
+                return RedirectToAction("Index", nameof(Transaction));
+            }
+            else
+            {
+                TempData["Error"] = "Unable to log in";
+                return View();
+            }
+        }
+
         public ActionResult Register()
         {
             var registerViewModel = new RegisterViewModel();
@@ -36,8 +63,14 @@ namespace ExpenseTrackerApp.Controllers
             else
             {
                 TempData["Error"] = "Unable to create user. Try another email adress or come back later";
-                return View(nameof(NotFound));
+                return View();
             }
+        }
+
+        public async Task<IActionResult> Logout()
+        {
+            await _authenticationService.Logout();
+            return RedirectToAction("Index", "Home");
         }
     }
 }

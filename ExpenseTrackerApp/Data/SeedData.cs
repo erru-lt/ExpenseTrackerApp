@@ -1,5 +1,6 @@
 ﻿using ExpenseTrackerApp.Enum;
 using ExpenseTrackerApp.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExpenseTrackerApp.Data
@@ -17,6 +18,16 @@ namespace ExpenseTrackerApp.Data
                     InsertCategories(context);
                     await context.SaveChangesAsync();
                 }
+            }
+        }
+
+        public static async Task EnsureRole(IServiceProvider serviceProvider, string roleName)
+        {
+            var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+            if(await roleManager.RoleExistsAsync(roleName) == false)
+            {
+                await roleManager.CreateAsync(new IdentityRole(roleName));
             }
         }
 

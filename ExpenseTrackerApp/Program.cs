@@ -35,6 +35,9 @@ using(var scope = app.Services.CreateScope())
 {
     var serviceProvider = scope.ServiceProvider;
     await SeedData.SeedCategories(serviceProvider);
+
+    await SeedData.EnsureRole(serviceProvider, UserRoles.Admin);
+    await SeedData.EnsureRole(serviceProvider, UserRoles.User);
 }
 
 // Configure the HTTP request pipeline.
