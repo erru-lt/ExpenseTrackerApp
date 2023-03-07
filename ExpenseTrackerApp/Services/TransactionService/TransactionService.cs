@@ -1,23 +1,28 @@
 ﻿using ExpenseTrackerApp.Data;
 using ExpenseTrackerApp.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace ExpenseTrackerApp.Services.TransactionService
 {
     public class TransactionService : ITransactionService
     {
         private readonly AppDbContext _context;
+        private readonly IHttpContextAccessor _httpContext;
 
-        public TransactionService(AppDbContext context)
+        public TransactionService(AppDbContext context, IHttpContextAccessor httpContext)
         {
             _context = context;
+            _httpContext = httpContext;
         }
 
         public async Task<IEnumerable<Transaction>> GetAllTransactionsAsync()
         {
-            var transactions = await _context.Transactions.Include(t => t.Category).ToListAsync();
+            var userId = GetUserId();
+            var transactions = await _context.Transactions.Where(t => t.OwnerId == userId).Include(t => t.Category).ToListAsync();
             return transactions;
         }
+
 
         public async Task<Transaction> GetTransactionByIdAsync(int id)
         {
@@ -27,6 +32,9 @@ namespace ExpenseTrackerApp.Services.TransactionService
 
         public async Task AddNewTransactionAsync(Transaction transaction)
         {
+            var userId = GetUserId();
+            transaction.OwnerId = userId;
+
             await _context.Transactions.AddAsync(transaction);
             await _context.SaveChangesAsync();
         }
@@ -42,7 +50,6 @@ namespace ExpenseTrackerApp.Services.TransactionService
 
                 await _context.SaveChangesAsync();
             }
-            //_context.Attach(transaction).State = EntityState.Modified;
         }
 
         public async Task DeleteTransactionAsync(int id)
@@ -50,6 +57,11 @@ namespace ExpenseTrackerApp.Services.TransactionService
             Transaction? transaction = await GetTransactionByIdAsync(id);
             _context.Remove(transaction);
             await _context.SaveChangesAsync();
+        }
+        
+        private string? GetUserId()
+        {
+            return _httpContext?.HttpContext?.User?.Identity?.Name;
         }
     }
 }

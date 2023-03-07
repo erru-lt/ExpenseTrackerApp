@@ -14,6 +14,7 @@ namespace ExpenseTrackerApp.Controllers
             _categoryService = categoryService;
         }
 
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             var result = await _categoryService.GetAllCategoriesAsync();

@@ -2,7 +2,7 @@
 
 namespace ExpenseTrackerApp.Models
 {
-    public class RegisterViewModel
+    public class Register
     {
         [Required(ErrorMessage = "Name is required")]
         [Display(Name = "Full Name")]

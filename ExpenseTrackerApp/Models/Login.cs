@@ -2,7 +2,7 @@
 
 namespace ExpenseTrackerApp.Models
 {
-    public class LoginViewModel
+    public class Login
     {
         [Required(ErrorMessage = "Email adress is required")]
         [Display(Name = "Email Adress")]

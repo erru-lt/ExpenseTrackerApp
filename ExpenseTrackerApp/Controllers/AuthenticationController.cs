@@ -1,5 +1,6 @@
 ﻿using ExpenseTrackerApp.Models;
 using ExpenseTrackerApp.Services.AuthenticationService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ExpenseTrackerApp.Controllers
@@ -13,14 +14,15 @@ namespace ExpenseTrackerApp.Controllers
             _authenticationService = authenticationService;
         }
 
+        [AllowAnonymous]
         public ActionResult Login()
         {
-            var loginViewModel = new LoginViewModel();
+            var loginViewModel = new Login();
             return View(loginViewModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(LoginViewModel loginViewModel)
+        public async Task<IActionResult> Login(Login loginViewModel)
         {
             if(ModelState.IsValid == false)
             {
@@ -40,14 +42,15 @@ namespace ExpenseTrackerApp.Controllers
             }
         }
 
+        [AllowAnonymous]
         public ActionResult Register()
         {
-            var registerViewModel = new RegisterViewModel();
+            var registerViewModel = new Register();
             return View(registerViewModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
+        public async Task<IActionResult> Register(Register registerViewModel)
         {
             if(!ModelState.IsValid)
             {

@@ -7,6 +7,7 @@ namespace ExpenseTrackerApp.Models
     public class Category
     {
         public int Id { get; set; }
+        public string OwnerId { get; set; } = string.Empty;
 
         [Required]
         [StringLength(maximumLength: 15, ErrorMessage = "Incorrect category name length", MinimumLength = 5)]

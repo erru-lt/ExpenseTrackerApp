@@ -1,8 +1,55 @@
-﻿@{
+﻿@using ExpenseTrackerApp.Data
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.0/dist/chart.umd.min.js"></script>
+</head>
+
+<div class="text-center mb-5">
     <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
+
+@if (User.IsInRole(UserRoles.User))
+{
+    <div>
+        <canvas id="myChart"></canvas>
+    </div>
+}
+
+@section Scripts
+    {
+    <script>     
+        const data = {
+            datasets: [
+                {
+                    label: "Income",
+                    backgroundColor: "rgb(99,255,132)",
+                    borderColor: "rgb(99,255,132)",
+                    cubicInterpolationMode: "monotone",
+                    data: @Json.Serialize(Model.IncomeDictionary)
+                },
+                {
+                    label: "Expense",
+                    backgroundColor: "rgb(255,99,132)",
+                    borderColor: "rgb(255,99,132)",
+                    cubicInterpolationMode: "monotone",
+                    data: @Json.Serialize(Model.ExpenseDicationary)
+                }
+            ]
+        };
+
+        const config = {
+            type: 'line',
+            data: data,
+            options: {}
+        };
+
+        const myChart = new Chart(
+            document.getElementById('myChart'),
+            config
+        );
+    </script>
+}

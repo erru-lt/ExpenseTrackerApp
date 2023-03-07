@@ -8,6 +8,7 @@ namespace ExpenseTrackerApp.Models
     public class Transaction
     {
         public int Id { get; set; }
+        public string OwnerId { get; set; } = string.Empty;
 
         [Required]
         public double Amount { get; set; }

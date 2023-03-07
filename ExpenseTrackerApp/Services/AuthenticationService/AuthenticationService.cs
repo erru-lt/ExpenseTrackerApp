@@ -15,7 +15,7 @@ namespace ExpenseTrackerApp.Services.AuthenticationService
             _signInManager = signInManager;
         }
 
-        public async Task<bool> Login(LoginViewModel loginViewModel)
+        public async Task<bool> Login(Login loginViewModel)
         {
             IdentityUser user = await FindUser(loginViewModel.EmailAdress);
 
@@ -28,7 +28,7 @@ namespace ExpenseTrackerApp.Services.AuthenticationService
         }
 
 
-        public async Task<bool> Register(RegisterViewModel registerViewModel)
+        public async Task<bool> Register(Register registerViewModel)
         {
             IdentityUser? user = await FindUser(registerViewModel.EmailAdress);
 
@@ -59,7 +59,7 @@ namespace ExpenseTrackerApp.Services.AuthenticationService
             await _signInManager.SignOutAsync();
         }
 
-        private async Task<bool> PasswordCheck(LoginViewModel loginViewModel, IdentityUser user)
+        private async Task<bool> PasswordCheck(Login loginViewModel, IdentityUser user)
         {
             var isPasswordMatch = await _userManager.CheckPasswordAsync(user, loginViewModel.Password);
 

@@ -7,15 +7,18 @@ namespace ExpenseTrackerApp.Services.CategoryService
     public class CategoryService : ICategoryService
     {
         private readonly AppDbContext _context;
+        private readonly IHttpContextAccessor _httpContext;
 
-        public CategoryService(AppDbContext context)
+        public CategoryService(AppDbContext context, IHttpContextAccessor httpContext)
         {
             _context = context;
+            _httpContext = httpContext;
         }
 
         public async Task<IEnumerable<Category>> GetAllCategoriesAsync()
         {
-            var categories = await _context.Categories.ToListAsync();
+            var userId = GetUserId();
+            var categories = await _context.Categories.Where(c => c.OwnerId == userId || c.OwnerId == string.Empty).ToListAsync();
             return categories;
         }
         
@@ -27,6 +30,9 @@ namespace ExpenseTrackerApp.Services.CategoryService
 
         public async Task AddNewCategoryAsync(Category category)
         {
+            var userId = GetUserId();
+            category.OwnerId = userId;
+
             await _context.Categories.AddAsync(category);
             await _context.SaveChangesAsync();
         }
@@ -51,6 +57,11 @@ namespace ExpenseTrackerApp.Services.CategoryService
 
             _context.Categories.Remove(category);
             await _context.SaveChangesAsync();
+        }
+
+        private string? GetUserId()
+        {
+            return _httpContext.HttpContext?.User.Identity?.Name;
         }
     }
 }

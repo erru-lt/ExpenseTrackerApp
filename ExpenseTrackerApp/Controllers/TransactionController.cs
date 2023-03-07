@@ -32,7 +32,6 @@ namespace ExpenseTrackerApp.Controllers
             ViewBag.Categories = new SelectList(categoryDropdown.Categories, "Id", "IconAndName");
 
             var transaction = new Transaction();
-            //ViewData["Categories"] = new SelectList(_context.Categories, "Id", "Icon");
             return View(transaction);
         }
 
@@ -43,7 +42,6 @@ namespace ExpenseTrackerApp.Controllers
             {
                 var categoryDropdown = await _dropdownService.GetCategoryDropdownValues();
                 ViewBag.Categories = new SelectList(categoryDropdown.Categories, "Id", "IconAndName");
-                //ViewData["Categories"] = new SelectList(_context.Categories, "Id", "Icon");
                 return View(nameof(Create), transaction);
             }
             await _transactionService.AddNewTransactionAsync(transaction);
